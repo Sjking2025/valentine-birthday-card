@@ -1,0 +1,945 @@
+/* ============================================
+   ROMANTIC VALENTINE + BIRTHDAY WEBSITE
+   Premium Cinematic Aesthetic
+   ============================================ */
+
+/* ---- CSS Custom Properties ---- */
+:root {
+    --pink: #ffdde1;
+    --red: #ff4d6d;
+    --deep-red: #c9184a;
+    --gold: #f4c025;
+    --gold-light: #ffe066;
+    --dark-bg: #0a0008;
+    --dark-card: rgba(255, 255, 255, 0.06);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --text-primary: #fff;
+    --text-secondary: rgba(255, 255, 255, 0.7);
+    --font-cursive: 'Great Vibes', cursive;
+    --font-body: 'Plus Jakarta Sans', sans-serif;
+    --transition-smooth: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ---- Reset & Base ---- */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+}
+
+body {
+    font-family: var(--font-body);
+    background: var(--dark-bg);
+    color: var(--text-primary);
+    overflow-x: hidden;
+    min-height: 100vh;
+    line-height: 1.7;
+    font-weight: 300;
+}
+
+/* ---- Sparkle Canvas ---- */
+#sparkle-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* ============================================
+   GLASSMORPHISM CARD
+   ============================================ */
+.glass-card {
+    background: var(--dark-card);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* ============================================
+   GLOWING TEXT
+   ============================================ */
+.cursive-title {
+    font-family: var(--font-cursive);
+    font-weight: 400;
+}
+
+.glow-text {
+    color: var(--gold);
+    text-shadow:
+        0 0 10px rgba(244, 192, 37, 0.4),
+        0 0 30px rgba(244, 192, 37, 0.2),
+        0 0 60px rgba(244, 192, 37, 0.1);
+    animation: textGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes textGlow {
+    0% {
+        text-shadow:
+            0 0 10px rgba(244, 192, 37, 0.3),
+            0 0 30px rgba(244, 192, 37, 0.15),
+            0 0 60px rgba(244, 192, 37, 0.08);
+    }
+    100% {
+        text-shadow:
+            0 0 15px rgba(244, 192, 37, 0.6),
+            0 0 40px rgba(244, 192, 37, 0.3),
+            0 0 80px rgba(244, 192, 37, 0.15);
+    }
+}
+
+/* ============================================
+   PASSWORD SCREEN
+   ============================================ */
+.password-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+        radial-gradient(ellipse at 20% 50%, rgba(201, 24, 74, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 50%, rgba(255, 77, 109, 0.1) 0%, transparent 50%),
+        linear-gradient(135deg, #0a0008 0%, #1a0011 40%, #0a0008 100%);
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+.password-screen.hide {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.password-bg-hearts {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.password-card {
+    position: relative;
+    z-index: 10;
+    padding: 50px 40px;
+    text-align: center;
+    max-width: 440px;
+    width: 90%;
+    animation: cardFloat 6s ease-in-out infinite;
+}
+
+@keyframes cardFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+.lock-icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+    animation: lockPulse 2s ease-in-out infinite;
+}
+
+@keyframes lockPulse {
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.1); opacity: 1; }
+}
+
+.password-card .cursive-title {
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin-bottom: 30px;
+    font-style: italic;
+}
+
+.input-wrapper {
+    position: relative;
+    margin-bottom: 24px;
+}
+
+.glow-input {
+    width: 100%;
+    padding: 16px 20px;
+    border: 2px solid rgba(255, 77, 109, 0.3);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.4s ease;
+    letter-spacing: 3px;
+    text-align: center;
+}
+
+.glow-input:focus {
+    border-color: var(--red);
+    box-shadow:
+        0 0 15px rgba(255, 77, 109, 0.3),
+        0 0 30px rgba(255, 77, 109, 0.15);
+}
+
+.glow-input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+}
+
+/* Shake animation for wrong password */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
+    20%, 40%, 60%, 80% { transform: translateX(8px); }
+}
+
+.shake {
+    animation: shake 0.6s ease;
+}
+
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 40px;
+    border: none;
+    border-radius: 60px;
+    background: linear-gradient(135deg, var(--red), var(--deep-red));
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+        0 4px 15px rgba(255, 77, 109, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 8px 25px rgba(255, 77, 109, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.heart-icon {
+    transition: transform 0.3s ease;
+}
+
+.btn-primary:hover .heart-icon {
+    transform: scale(1.2);
+}
+
+/* Ripple effect */
+.ripple-btn::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.3) 10%, transparent 10%);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    transform: scale(10);
+    opacity: 0;
+    transition: transform 0.5s, opacity 0.8s;
+}
+
+.ripple-btn:active::after {
+    transform: scale(0);
+    opacity: 1;
+    transition: 0s;
+}
+
+.hint-message {
+    color: var(--pink);
+    font-size: 0.85rem;
+    margin-top: 16px;
+    min-height: 22px;
+    font-style: italic;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.hint-message.visible {
+    opacity: 1;
+}
+
+.footer-whisper {
+    color: rgba(255, 255, 255, 0.2);
+    font-size: 0.8rem;
+    margin-top: 20px;
+    font-style: italic;
+}
+
+/* ============================================
+   CONFETTI
+   ============================================ */
+#confetti-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 999;
+    overflow: hidden;
+}
+
+.confetti-piece {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    top: -10px;
+    opacity: 0;
+    animation: confettiFall 3s ease-in forwards;
+}
+
+@keyframes confettiFall {
+    0% { opacity: 1; transform: translateY(0) rotate(0deg); }
+    100% { opacity: 0; transform: translateY(100vh) rotate(720deg); }
+}
+
+/* ============================================
+   MUSIC BUTTON
+   ============================================ */
+.music-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 900;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border: 1px solid var(--glass-border);
+    border-radius: 60px;
+    background: rgba(255, 77, 109, 0.15);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    color: var(--pink);
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    visibility: hidden;
+}
+
+.music-btn.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.music-btn:hover {
+    background: rgba(255, 77, 109, 0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(255, 77, 109, 0.2);
+}
+
+.music-icon {
+    font-size: 1.2rem;
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.music-btn.playing .music-icon {
+    animation: musicSpin 2s linear infinite;
+}
+
+@keyframes musicSpin {
+    0% { transform: rotate(0deg) scale(1); }
+    25% { transform: rotate(90deg) scale(1.1); }
+    50% { transform: rotate(180deg) scale(1); }
+    75% { transform: rotate(270deg) scale(1.1); }
+    100% { transform: rotate(360deg) scale(1); }
+}
+
+/* ============================================
+   MAIN CONTENT
+   ============================================ */
+.main-content {
+    position: relative;
+    z-index: 1;
+}
+
+.main-content.hidden {
+    display: none;
+}
+
+.section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 80px 20px;
+    overflow: hidden;
+}
+
+.section-content {
+    max-width: 900px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+/* ---- Fade-in on scroll ---- */
+.fade-in-section {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.fade-in-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ============================================
+   SECTION: WELCOME
+   ============================================ */
+.section-welcome {
+    background:
+        radial-gradient(ellipse at center, rgba(201, 24, 74, 0.08) 0%, transparent 60%),
+        transparent;
+}
+
+.parallax-bg {
+    position: absolute;
+    top: -50px;
+    left: 0;
+    width: 100%;
+    height: calc(100% + 100px);
+    background:
+        radial-gradient(circle at 30% 40%, rgba(255, 77, 109, 0.06) 0%, transparent 40%),
+        radial-gradient(circle at 70% 60%, rgba(244, 192, 37, 0.04) 0%, transparent 40%);
+    z-index: 0;
+    will-change: transform;
+}
+
+.mega-title {
+    font-size: clamp(3rem, 8vw, 6rem);
+    line-height: 1.2;
+    margin-bottom: 20px;
+}
+
+.hero-subtitle {
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    color: var(--text-secondary);
+    font-weight: 300;
+    margin-bottom: 60px;
+}
+
+.scroll-indicator {
+    margin-top: 30px;
+}
+
+.scroll-arrow {
+    display: inline-block;
+    font-size: 1.2rem;
+    color: var(--gold);
+    opacity: 0.5;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-15px); }
+    60% { transform: translateY(-8px); }
+}
+
+/* ============================================
+   SECTION: VALENTINE
+   ============================================ */
+.section-valentine {
+    background:
+        radial-gradient(ellipse at 50% 30%, rgba(255, 77, 109, 0.08) 0%, transparent 50%),
+        transparent;
+}
+
+.section-heading {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    margin-bottom: 40px;
+}
+
+.valentine-card {
+    padding: 50px 40px;
+    position: relative;
+    max-width: 650px;
+    margin: 0 auto;
+}
+
+.card-heart-decor {
+    position: absolute;
+    top: -20px;
+    right: -10px;
+    font-size: 3rem;
+    opacity: 0.5;
+    animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    15% { transform: scale(1.15); }
+    30% { transform: scale(1); }
+    45% { transform: scale(1.1); }
+}
+
+.typing-message {
+    font-size: clamp(0.95rem, 2vw, 1.1rem);
+    color: var(--pink);
+    line-height: 1.9;
+    min-height: 180px;
+    text-align: left;
+}
+
+.typing-cursor {
+    color: var(--red);
+    font-weight: 300;
+    animation: blink 0.8s step-end infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+/* ============================================
+   SECTION: BIRTHDAY
+   ============================================ */
+.section-birthday {
+    background:
+        radial-gradient(ellipse at 50% 70%, rgba(244, 192, 37, 0.06) 0%, transparent 50%),
+        transparent;
+}
+
+.birthday-scene {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+/* Birthday Cake CSS */
+.birthday-cake {
+    flex-shrink: 0;
+}
+
+.cake-body {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.cake-layer {
+    border-radius: 12px;
+}
+
+.cake-layer-1 {
+    width: 120px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--pink), #f9a8b8);
+    border-radius: 8px 8px 12px 12px;
+}
+
+.cake-layer-2 {
+    width: 140px;
+    height: 45px;
+    background: linear-gradient(135deg, var(--red), #e0465e);
+    margin-top: -2px;
+}
+
+.cake-layer-3 {
+    width: 160px;
+    height: 50px;
+    background: linear-gradient(135deg, var(--deep-red), #a01040);
+    margin-top: -2px;
+    border-radius: 4px 4px 16px 16px;
+}
+
+.candle-row {
+    display: flex;
+    gap: 14px;
+    position: absolute;
+    top: -32px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.candle {
+    width: 6px;
+    height: 28px;
+    background: linear-gradient(to top, var(--gold), var(--gold-light));
+    border-radius: 3px 3px 1px 1px;
+    position: relative;
+}
+
+.flame {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 14px;
+    background: radial-gradient(ellipse, #fff 0%, var(--gold-light) 40%, var(--gold) 70%, transparent 100%);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    animation: flicker 0.3s ease-in-out infinite alternate;
+    box-shadow: 0 0 8px rgba(244, 192, 37, 0.6), 0 0 20px rgba(244, 192, 37, 0.3);
+}
+
+@keyframes flicker {
+    0% { transform: translateX(-50%) scale(1) rotate(-2deg); opacity: 1; }
+    50% { transform: translateX(-50%) scale(1.05, 0.95) rotate(1deg); opacity: 0.9; }
+    100% { transform: translateX(-50%) scale(0.95, 1.05) rotate(-1deg); opacity: 1; }
+}
+
+/* Stagger candle flicker */
+.candle:nth-child(2) .flame { animation-delay: 0.1s; }
+.candle:nth-child(3) .flame { animation-delay: 0.2s; }
+.candle:nth-child(4) .flame { animation-delay: 0.05s; }
+.candle:nth-child(5) .flame { animation-delay: 0.15s; }
+
+.birthday-card {
+    padding: 40px 35px;
+    max-width: 480px;
+    text-align: left;
+}
+
+.poem-text {
+    font-size: clamp(0.9rem, 1.8vw, 1.05rem);
+    color: var(--pink);
+    line-height: 1.9;
+}
+
+/* ============================================
+   SECTION: QUOTES
+   ============================================ */
+.section-quotes {
+    background:
+        radial-gradient(ellipse at 30% 50%, rgba(255, 77, 109, 0.05) 0%, transparent 40%),
+        radial-gradient(ellipse at 70% 50%, rgba(244, 192, 37, 0.04) 0%, transparent 40%),
+        transparent;
+}
+
+.quotes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+    margin-top: 10px;
+}
+
+.quote-card {
+    padding: 35px 28px;
+    text-align: left;
+    position: relative;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.quote-card:hover {
+    box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.5),
+        0 0 20px rgba(255, 77, 109, 0.1);
+}
+
+.quote-mark {
+    font-family: var(--font-cursive);
+    font-size: 4rem;
+    color: var(--gold);
+    opacity: 0.3;
+    line-height: 1;
+    display: block;
+    margin-bottom: -10px;
+}
+
+.quote-card p {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    font-style: italic;
+}
+
+/* ============================================
+   SECTION: PROMISE
+   ============================================ */
+.section-promise {
+    background:
+        radial-gradient(ellipse at center, rgba(244, 192, 37, 0.06) 0%, transparent 50%),
+        transparent;
+}
+
+.infinity-heart {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    animation: floatInfinity 4s ease-in-out infinite;
+    display: inline-block;
+}
+
+@keyframes floatInfinity {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-12px) scale(1.05); }
+}
+
+.promise-card {
+    padding: 50px 40px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.promise-text {
+    font-size: clamp(0.95rem, 2vw, 1.1rem);
+    color: var(--pink);
+    line-height: 2;
+    text-align: center;
+}
+
+.dramatic-text {
+    color: var(--gold);
+    font-weight: 500;
+    font-size: 1.15em;
+    opacity: 0;
+    transition: opacity 2s ease;
+    display: inline-block;
+}
+
+.dramatic-text.visible {
+    opacity: 1;
+    text-shadow: 0 0 20px rgba(244, 192, 37, 0.4);
+}
+
+/* ============================================
+   SECTION: SIGNATURE
+   ============================================ */
+.section-signature {
+    background: linear-gradient(to bottom, transparent, #000);
+    min-height: 100vh;
+}
+
+.signature-content {
+    text-align: center;
+}
+
+.signature-reveal {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    line-height: 1.3;
+    margin-bottom: 30px;
+}
+
+.pulse-heart {
+    font-size: 2.5rem;
+    animation: heartPulse 2s ease-in-out infinite;
+    margin-bottom: 30px;
+}
+
+@keyframes heartPulse {
+    0%, 100% { transform: scale(1); opacity: 0.7; }
+    50% { transform: scale(1.15); opacity: 1; }
+}
+
+.golden-line {
+    width: 100px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 0 auto 30px;
+    opacity: 0.5;
+}
+
+.made-with-love {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.25);
+    font-style: italic;
+}
+
+/* ============================================
+   FLOATING HEARTS
+   ============================================ */
+#floating-hearts {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+    overflow: hidden;
+}
+
+.floating-heart {
+    position: absolute;
+    bottom: -30px;
+    color: var(--red);
+    opacity: 0;
+    animation: floatUp linear forwards;
+    will-change: transform;
+}
+
+@keyframes floatUp {
+    0% {
+        opacity: 0;
+        transform: translateY(0) rotate(0deg) scale(0.5);
+    }
+    10% {
+        opacity: 0.7;
+    }
+    90% {
+        opacity: 0.3;
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-110vh) rotate(360deg) scale(1);
+    }
+}
+
+/* ============================================
+   3D TILT CARD EFFECT
+   ============================================ */
+.tilt-card {
+    transform-style: preserve-3d;
+    transition: transform 0.15s ease;
+    will-change: transform;
+}
+
+/* ============================================
+   BACKGROUND GRADIENT ANIMATION
+   ============================================ */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: linear-gradient(
+        135deg,
+        #0a0008 0%,
+        #12000c 25%,
+        #1a0011 50%,
+        #0f000a 75%,
+        #0a0008 100%
+    );
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 768px) {
+    .password-card {
+        padding: 40px 28px;
+    }
+
+    .section {
+        padding: 60px 16px;
+    }
+
+    .valentine-card,
+    .promise-card {
+        padding: 35px 25px;
+    }
+
+    .birthday-scene {
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .birthday-card {
+        padding: 30px 25px;
+    }
+
+    .quotes-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .quote-card {
+        padding: 28px 22px;
+    }
+
+    .music-btn {
+        bottom: 20px;
+        right: 20px;
+        padding: 10px 16px;
+        font-size: 0.8rem;
+    }
+
+    .card-heart-decor {
+        font-size: 2rem;
+        top: -12px;
+        right: -5px;
+    }
+
+    .infinity-heart {
+        font-size: 2rem;
+    }
+
+    .signature-reveal {
+        font-size: clamp(2rem, 5vw, 3rem);
+    }
+}
+
+@media (max-width: 480px) {
+    .mega-title {
+        font-size: clamp(2.2rem, 10vw, 3.5rem);
+    }
+
+    .section-heading {
+        font-size: clamp(1.8rem, 7vw, 2.5rem);
+    }
+
+    .password-card .cursive-title {
+        font-size: clamp(1.5rem, 6vw, 2rem);
+    }
+
+    .btn-primary {
+        padding: 12px 32px;
+        font-size: 0.9rem;
+    }
+}
+
+/* ============================================
+   ACCESSIBILITY: REDUCED MOTION
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

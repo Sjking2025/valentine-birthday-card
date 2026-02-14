@@ -137,14 +137,49 @@
             </div>
         </section>
 
-        <!-- ---- BIRTHDAY POEM ---- -->
+        <!-- ---- BIRTHDAY — Countdown + Celebration Mode ---- -->
         <section id="birthday" class="section section-birthday">
+            <!-- Celebration ambient overlay -->
+            <div class="celebration-overlay" id="celebration-overlay">
+                <div class="ambient-glow"></div>
+                <div id="balloons-container" class="balloons-container"></div>
+                <div id="crackers-container" class="crackers-container"></div>
+            </div>
+
             <div class="section-inner">
                 <div class="birthday-layout fade-in-section">
                     <div class="birthday-heading">
                         <span class="overline stagger-item">— february 15 —</span>
                         <h2 class="display-heading section-title stagger-item">Happy Birthday<br><em>Da Au</em></h2>
                     </div>
+
+                    <!-- COUNTDOWN TIMER — visible before midnight -->
+                    <div id="birthday-countdown" class="birthday-countdown">
+                        <p class="countdown-label">🎂 Birthday begins in</p>
+                        <div class="countdown-digits">
+                            <div class="countdown-unit">
+                                <span class="countdown-num" id="cd-hours">00</span>
+                                <span class="countdown-tag">Hours</span>
+                            </div>
+                            <span class="countdown-colon">:</span>
+                            <div class="countdown-unit">
+                                <span class="countdown-num" id="cd-minutes">00</span>
+                                <span class="countdown-tag">Minutes</span>
+                            </div>
+                            <span class="countdown-colon">:</span>
+                            <div class="countdown-unit">
+                                <span class="countdown-num" id="cd-seconds">00</span>
+                                <span class="countdown-tag">Seconds</span>
+                            </div>
+                        </div>
+                        <p class="advance-wishes-label">✨ Advance Birthday Wishes, my love! ✨</p>
+                    </div>
+
+                    <!-- ACTUAL BIRTHDAY — revealed at midnight -->
+                    <div id="birthday-actual" class="birthday-actual">
+                        <div class="celebration-badge">🎉 It's Your Birthday! 🎉</div>
+                    </div>
+
                     <div class="birthday-scene">
                         <div class="birthday-cake">
                             <div class="cake-body">
@@ -173,18 +208,35 @@
                         </div>
                         <div class="tilt-card glass-card birthday-card">
                             <div class="card-accent-line"></div>
-                            <p class="poem-text">
-                                On this day, a star was born,<br>
-                                A soul so bright, a love so warm.<br>
-                                You came into this world with grace,<br>
-                                And filled my heart, my sacred space.<br><br>
-                                Every laugh, every smile you share,<br>
-                                Reminds me how much I truly care.<br>
-                                Today we celebrate the gift of you,<br>
-                                And all the magic that you do.<br><br>
-                                <em>Happy Birthday, my dearest one,<br>
-                                    My moon, my stars, my only sun.</em> ✨
-                            </p>
+                            <!-- Advance wish (before midnight) -->
+                            <div id="poem-advance" class="poem-advance">
+                                <p class="poem-text">
+                                    Tomorrow the world celebrates you,<br>
+                                    But I couldn't wait a single moment more.<br>
+                                    So here's an early whisper from my heart —<br><br>
+                                    You are the most beautiful chapter<br>
+                                    of my life's story.<br>
+                                    And tomorrow, when the clock strikes twelve,<br>
+                                    the whole universe will celebrate<br>
+                                    the day my favorite person was born.<br><br>
+                                    <em>Get ready, my love... the best is yet to come.</em> 🌟
+                                </p>
+                            </div>
+                            <!-- Actual wish (after midnight) -->
+                            <div id="poem-actual" class="poem-actual" style="display:none;">
+                                <p class="poem-text">
+                                    On this day, a star was born,<br>
+                                    A soul so bright, a love so warm.<br>
+                                    You came into this world with grace,<br>
+                                    And filled my heart, my sacred space.<br><br>
+                                    Every laugh, every smile you share,<br>
+                                    Reminds me how much I truly care.<br>
+                                    Today we celebrate the gift of you,<br>
+                                    And all the magic that you do.<br><br>
+                                    <em>Happy Birthday, my dearest one,<br>
+                                        My moon, my stars, my only sun.</em> ✨
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -197,7 +249,7 @@
                 <div class="fade-in-section">
                     <div class="quotes-header">
                         <span class="overline">— treasured words —</span>
-                        <h2 class="display-heading section-title">Our Beautiful<br><em>Moments</em></h2>
+                        <h2 class="display-heading section-title">Words That<br><em>Define Us</em></h2>
                     </div>
                     <div class="quotes-masonry">
                         <div class="tilt-card glass-card quote-card quote-tall">
@@ -235,6 +287,106 @@
                             <span class="quote-flourish">~</span>
                         </div>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ---- MEMORY TIMELINE — Vertical Storytelling ---- -->
+        <section id="memories" class="section section-memories">
+            <div class="section-inner">
+                <div class="memories-header fade-in-section">
+                    <span class="overline">— our journey —</span>
+                    <h2 class="display-heading section-title">Our Beautiful<br><em>Memories</em></h2>
+                    <p class="body-elegant">Every moment with you became my favorite place.</p>
+                </div>
+
+                <div class="timeline">
+                    <div class="timeline-line"></div>
+
+                    <!-- Memory 1 -->
+                    <div class="timeline-item timeline-left fade-in-section">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-card glass-card tilt-card">
+                            <div class="card-accent-line"></div>
+                            <div class="timeline-photo-placeholder" data-gallery="0">
+                                <span class="photo-add-hint">📷 Add photo</span>
+                            </div>
+                            <div class="timeline-card-body">
+                                <span class="timeline-date">The Beginning</span>
+                                <p class="timeline-note">The day our paths crossed and everything changed forever…</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Memory 2 -->
+                    <div class="timeline-item timeline-right fade-in-section">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-card glass-card tilt-card">
+                            <div class="card-accent-line"></div>
+                            <div class="timeline-photo-placeholder" data-gallery="1">
+                                <span class="photo-add-hint">📷 Add photo</span>
+                            </div>
+                            <div class="timeline-card-body">
+                                <span class="timeline-date">First Conversation</span>
+                                <p class="timeline-note">That first nervous "hello" that turned into hours of talking…
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Memory 3 -->
+                    <div class="timeline-item timeline-left fade-in-section">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-card glass-card tilt-card">
+                            <div class="card-accent-line"></div>
+                            <div class="timeline-photo-placeholder" data-gallery="2">
+                                <span class="photo-add-hint">📷 Add photo</span>
+                            </div>
+                            <div class="timeline-card-body">
+                                <span class="timeline-date">First Laugh Together</span>
+                                <p class="timeline-note">When I heard your laugh for the first time, my heart skipped a
+                                    beat.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Memory 4 -->
+                    <div class="timeline-item timeline-right fade-in-section">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-card glass-card tilt-card">
+                            <div class="card-accent-line"></div>
+                            <div class="timeline-photo-placeholder" data-gallery="3">
+                                <span class="photo-add-hint">📷 Add photo</span>
+                            </div>
+                            <div class="timeline-card-body">
+                                <span class="timeline-date">Special Moments</span>
+                                <p class="timeline-note">Every little moment with you became a memory I never want to
+                                    forget.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Memory 5 -->
+                    <div class="timeline-item timeline-left fade-in-section">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-card glass-card tilt-card">
+                            <div class="card-accent-line"></div>
+                            <div class="timeline-photo-placeholder" data-gallery="4">
+                                <span class="photo-add-hint">📷 Add photo</span>
+                            </div>
+                            <div class="timeline-card-body">
+                                <span class="timeline-date">Today & Forever</span>
+                                <p class="timeline-note">And here we are — still laughing, still loving, still choosing
+                                    each other.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relive-section fade-in-section">
+                    <button id="relive-btn" class="btn-elegant ripple-btn relive-btn">
+                        <span>✨ Relive Our Story</span>
+                    </button>
                 </div>
             </div>
         </section>

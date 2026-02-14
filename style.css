@@ -1095,6 +1095,498 @@ body {
 }
 
 /* ============================================
+   BIRTHDAY — Countdown Timer
+   ============================================ */
+.birthday-countdown {
+    margin-bottom: var(--space-lg);
+}
+
+.countdown-label {
+    font-family: var(--font-serif);
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: var(--gold);
+    letter-spacing: 0.08em;
+    margin-bottom: var(--space-md);
+}
+
+.countdown-digits {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.countdown-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.countdown-num {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 700;
+    color: var(--gold-bright);
+    text-shadow:
+        0 0 12px rgba(212, 168, 67, 0.5),
+        0 0 32px rgba(212, 168, 67, 0.2);
+    min-width: 90px;
+    background: rgba(10, 22, 40, 0.5);
+    border: 1px solid rgba(212, 168, 67, 0.15);
+    border-radius: 12px;
+    padding: 12px 8px;
+    backdrop-filter: blur(8px);
+    transition: transform 0.3s ease;
+}
+
+.countdown-num.flip {
+    transform: scale(1.08);
+}
+
+.countdown-tag {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-top: 6px;
+}
+
+.countdown-colon {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: var(--deep-pink);
+    text-shadow: 0 0 10px rgba(232, 67, 147, 0.4);
+    animation: colonPulse 1s ease-in-out infinite;
+    padding-bottom: 24px;
+}
+
+@keyframes colonPulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.3;
+    }
+}
+
+.advance-wishes-label {
+    font-family: var(--font-serif);
+    font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+    color: var(--pink-blush);
+    margin-top: var(--space-md);
+    letter-spacing: 0.05em;
+    animation: softGlow 3s ease-in-out infinite;
+}
+
+@keyframes softGlow {
+
+    0%,
+    100% {
+        text-shadow: 0 0 6px rgba(232, 67, 147, 0.2);
+    }
+
+    50% {
+        text-shadow: 0 0 18px rgba(232, 67, 147, 0.5);
+    }
+}
+
+/* Birthday ACTUAL — revealed at midnight */
+.birthday-actual {
+    display: none;
+}
+
+.birthday-actual.active {
+    display: block;
+}
+
+.celebration-badge {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    color: var(--gold-bright);
+    text-shadow:
+        0 0 16px rgba(212, 168, 67, 0.6),
+        0 0 40px rgba(212, 168, 67, 0.3);
+    animation: celebPulse 2s ease-in-out infinite;
+    margin-bottom: var(--space-md);
+}
+
+@keyframes celebPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+
+    50% {
+        transform: scale(1.06);
+        filter: brightness(1.3);
+    }
+}
+
+.poem-advance,
+.poem-actual {
+    transition: opacity 0.8s ease;
+}
+
+/* ============================================
+   BIRTHDAY — Celebration Overlay
+   ============================================ */
+.celebration-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 1.2s ease;
+}
+
+.section-birthday {
+    position: relative;
+}
+
+.section-birthday .section-inner {
+    position: relative;
+    z-index: 1;
+}
+
+.celebration-overlay.active {
+    opacity: 1;
+}
+
+.ambient-glow {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse at 30% 50%, rgba(232, 67, 147, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 40%, rgba(212, 168, 67, 0.08) 0%, transparent 50%);
+    animation: ambientBreathe 4s ease-in-out infinite;
+}
+
+@keyframes ambientBreathe {
+
+    0%,
+    100% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+/* Balloons */
+.balloons-container {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+}
+
+.balloon {
+    position: absolute;
+    bottom: -60px;
+    width: 32px;
+    height: 42px;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    opacity: 0.75;
+    animation: floatUp linear forwards;
+}
+
+.balloon::after {
+    content: '';
+    position: absolute;
+    bottom: -16px;
+    left: 50%;
+    width: 1px;
+    height: 16px;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateX(-50%);
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 0.75;
+    }
+
+    90% {
+        opacity: 0.6;
+    }
+
+    100% {
+        transform: translateY(-110vh) rotate(15deg);
+        opacity: 0;
+    }
+}
+
+/* Crackers */
+.crackers-container {
+    position: absolute;
+    inset: 0;
+}
+
+.cracker-burst {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    animation: crackerFly 1.2s ease-out forwards;
+}
+
+@keyframes crackerFly {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translate(var(--dx), var(--dy)) scale(0.3);
+        opacity: 0;
+    }
+}
+
+/* Cake glow pulse on celebration */
+.cake-glow-active .flame {
+    box-shadow:
+        0 0 12px rgba(212, 168, 67, 0.8),
+        0 0 32px rgba(212, 168, 67, 0.4),
+        0 0 60px rgba(212, 168, 67, 0.2);
+}
+
+/* ============================================
+   SECTION: MEMORY TIMELINE
+   ============================================ */
+.section-memories {
+    background:
+        radial-gradient(ellipse at 50% 30%, rgba(212, 168, 67, 0.03) 0%, transparent 50%),
+        transparent;
+}
+
+.memories-header {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+}
+
+.timeline {
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: var(--space-lg) 0;
+}
+
+.timeline-line {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, transparent, var(--gold), var(--deep-pink), var(--gold), transparent);
+    transform: translateX(-50%);
+    box-shadow: 0 0 8px rgba(212, 168, 67, 0.3);
+}
+
+.timeline-item {
+    position: relative;
+    width: 50%;
+    padding: 0 40px var(--space-lg);
+}
+
+.timeline-left {
+    left: 0;
+    text-align: right;
+    padding-right: 40px;
+}
+
+.timeline-right {
+    left: 50%;
+    text-align: left;
+    padding-left: 40px;
+}
+
+.timeline-marker {
+    position: absolute;
+    top: 20px;
+    width: 14px;
+    height: 14px;
+    background: var(--gold);
+    border: 2px solid var(--midnight);
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(212, 168, 67, 0.5);
+    z-index: 2;
+    animation: markerPulse 3s ease-in-out infinite;
+}
+
+.timeline-left .timeline-marker {
+    right: -7px;
+}
+
+.timeline-right .timeline-marker {
+    left: -7px;
+}
+
+@keyframes markerPulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 6px rgba(212, 168, 67, 0.4);
+    }
+
+    50% {
+        box-shadow: 0 0 16px rgba(212, 168, 67, 0.8);
+    }
+}
+
+.timeline-card {
+    padding: var(--space-md);
+    text-align: left;
+}
+
+.timeline-photo-placeholder {
+    width: 100%;
+    height: 180px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, rgba(10, 22, 40, 0.6), rgba(30, 45, 70, 0.4));
+    border: 1px dashed rgba(212, 168, 67, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-sm);
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+.timeline-photo-placeholder:hover {
+    border-color: rgba(212, 168, 67, 0.5);
+}
+
+.timeline-photo-placeholder img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.photo-add-hint {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+}
+
+.timeline-card-body {
+    padding-top: var(--space-xs);
+}
+
+.timeline-date {
+    font-family: var(--font-display);
+    font-size: clamp(0.85rem, 1.5vw, 1rem);
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.timeline-note {
+    font-family: var(--font-serif);
+    font-size: clamp(0.85rem, 1.4vw, 0.95rem);
+    color: var(--text-secondary);
+    line-height: 1.7;
+}
+
+.relive-section {
+    text-align: center;
+    padding-top: var(--space-lg);
+}
+
+.relive-btn {
+    font-size: 1rem;
+    padding: 14px 36px;
+}
+
+/* Relive mode narration overlay */
+.relive-narration {
+    position: fixed;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(10, 22, 40, 0.92);
+    border: 1px solid rgba(212, 168, 67, 0.2);
+    backdrop-filter: blur(12px);
+    padding: 16px 32px;
+    border-radius: 12px;
+    z-index: 1000;
+    max-width: 500px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    animation: fadeUp 0.6s ease;
+}
+
+.relive-narration p {
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    color: var(--pink-blush);
+    line-height: 1.6;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+/* Mobile responsive timeline */
+@media (max-width: 768px) {
+    .timeline-line {
+        left: 20px;
+    }
+
+    .timeline-item {
+        width: 100%;
+        padding-left: 50px;
+        padding-right: 16px;
+    }
+
+    .timeline-left,
+    .timeline-right {
+        left: 0;
+        text-align: left;
+        padding-left: 50px;
+    }
+
+    .timeline-left .timeline-marker,
+    .timeline-right .timeline-marker {
+        left: 13px;
+        right: auto;
+    }
+
+    .countdown-num {
+        min-width: 70px;
+        font-size: clamp(2rem, 5vw, 3rem);
+        padding: 8px 6px;
+    }
+
+    .countdown-colon {
+        font-size: clamp(1.5rem, 4vw, 2.5rem);
+    }
+}
+
+/* ============================================
    SECTION: QUOTES (Masonry)
    ============================================ */
 .section-quotes {

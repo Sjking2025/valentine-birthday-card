@@ -624,7 +624,233 @@ function initParallax() {
 initParallax();
 
 /* ==================================================
-   11. PROPOSAL MODE 💍
+   11. BIRTHDAY COUNTDOWN + CELEBRATION 🎂
+   ================================================== */
+
+function initBirthdayCountdown() {
+    const countdownEl = document.getElementById('birthday-countdown');
+    const actualEl = document.getElementById('birthday-actual');
+    const poemAdvance = document.getElementById('poem-advance');
+    const poemActual = document.getElementById('poem-actual');
+    const celebrationOverlay = document.getElementById('celebration-overlay');
+    const birthdaySection = document.getElementById('birthday');
+
+    const cdHours = document.getElementById('cd-hours');
+    const cdMinutes = document.getElementById('cd-minutes');
+    const cdSeconds = document.getElementById('cd-seconds');
+
+    if (!countdownEl || !cdHours) return;
+
+    // Target: Feb 15 midnight IST (UTC+5:30 → Feb 14 18:30 UTC)
+    const now = new Date();
+    const year = now.getFullYear();
+    // Build target date in IST: Feb 15, 00:00:00 IST
+    const targetIST = new Date(Date.UTC(year, 1, 14, 18, 30, 0)); // Feb = month index 1
+
+    // If already past Feb 15 midnight IST this year, birthday is NOW
+    if (now >= targetIST) {
+        activateCelebration();
+        return;
+    }
+
+    function updateCountdown() {
+        const nowMs = Date.now();
+        const diff = targetIST.getTime() - nowMs;
+
+        if (diff <= 0) {
+            clearInterval(timerInterval);
+            activateCelebration();
+            return;
+        }
+
+        const totalSec = Math.floor(diff / 1000);
+        const hours = Math.floor(totalSec / 3600);
+        const minutes = Math.floor((totalSec % 3600) / 60);
+        const seconds = totalSec % 60;
+
+        const hStr = String(hours).padStart(2, '0');
+        const mStr = String(minutes).padStart(2, '0');
+        const sStr = String(seconds).padStart(2, '0');
+
+        // Flip animation on change
+        if (cdHours.textContent !== hStr) {
+            cdHours.textContent = hStr;
+            cdHours.classList.add('flip');
+            setTimeout(() => cdHours.classList.remove('flip'), 300);
+        }
+        if (cdMinutes.textContent !== mStr) {
+            cdMinutes.textContent = mStr;
+            cdMinutes.classList.add('flip');
+            setTimeout(() => cdMinutes.classList.remove('flip'), 300);
+        }
+        if (cdSeconds.textContent !== sStr) {
+            cdSeconds.textContent = sStr;
+            cdSeconds.classList.add('flip');
+            setTimeout(() => cdSeconds.classList.remove('flip'), 300);
+        }
+    }
+
+    updateCountdown();
+    const timerInterval = setInterval(updateCountdown, 1000);
+
+    function activateCelebration() {
+        // Hide countdown, show actual wishes
+        countdownEl.style.display = 'none';
+        actualEl.classList.add('active');
+
+        // Swap poems
+        if (poemAdvance) poemAdvance.style.display = 'none';
+        if (poemActual) poemActual.style.display = 'block';
+
+        // Enable celebration overlay
+        if (celebrationOverlay) celebrationOverlay.classList.add('active');
+
+        // Cake glow
+        const cake = birthdaySection?.querySelector('.birthday-cake');
+        if (cake) cake.classList.add('cake-glow-active');
+
+        // Launch celebration effects
+        launchBalloons();
+        launchCrackers();
+        launchConfetti();
+    }
+}
+
+/* ----- Balloon Generator ----- */
+function launchBalloons() {
+    const container = document.getElementById('balloons-container');
+    if (!container) return;
+
+    const colors = [
+        'rgba(232, 67, 147, 0.7)',   // deep pink
+        'rgba(212, 168, 67, 0.7)',    // gold
+        'rgba(255, 182, 193, 0.7)',   // blush
+        'rgba(200, 140, 60, 0.6)',    // warm amber
+        'rgba(180, 60, 120, 0.6)',    // rose
+    ];
+
+    function spawnWave() {
+        for (let i = 0; i < 6; i++) {
+            setTimeout(() => {
+                const balloon = document.createElement('div');
+                balloon.classList.add('balloon');
+                balloon.style.left = `${10 + Math.random() * 80}%`;
+                balloon.style.background = colors[Math.floor(Math.random() * colors.length)];
+                balloon.style.animationDuration = `${6 + Math.random() * 4}s`;
+                balloon.style.width = `${24 + Math.random() * 16}px`;
+                balloon.style.height = `${32 + Math.random() * 20}px`;
+                container.appendChild(balloon);
+                balloon.addEventListener('animationend', () => balloon.remove());
+            }, i * 400);
+        }
+    }
+
+    spawnWave();
+    setTimeout(spawnWave, 3000);
+    setTimeout(spawnWave, 7000);
+    // Continuous gentle flow
+    setInterval(() => {
+        const balloon = document.createElement('div');
+        balloon.classList.add('balloon');
+        balloon.style.left = `${10 + Math.random() * 80}%`;
+        balloon.style.background = colors[Math.floor(Math.random() * colors.length)];
+        balloon.style.animationDuration = `${8 + Math.random() * 4}s`;
+        container.appendChild(balloon);
+        balloon.addEventListener('animationend', () => balloon.remove());
+    }, 3000);
+}
+
+/* ----- Cracker Particle Bursts ----- */
+function launchCrackers() {
+    const container = document.getElementById('crackers-container');
+    if (!container) return;
+
+    const colors = ['#d4a843', '#e84393', '#f5c6d0', '#fff', '#c9944a'];
+
+    function burst(x, y) {
+        for (let i = 0; i < 20; i++) {
+            const p = document.createElement('div');
+            p.classList.add('cracker-burst');
+            const angle = (Math.PI * 2 * i) / 20 + (Math.random() - 0.5) * 0.5;
+            const dist = 40 + Math.random() * 60;
+            p.style.left = `${x}px`;
+            p.style.top = `${y}px`;
+            p.style.background = colors[Math.floor(Math.random() * colors.length)];
+            p.style.setProperty('--dx', `${Math.cos(angle) * dist}px`);
+            p.style.setProperty('--dy', `${Math.sin(angle) * dist}px`);
+            container.appendChild(p);
+            p.addEventListener('animationend', () => p.remove());
+        }
+    }
+
+    // Random bursts
+    for (let i = 0; i < 5; i++) {
+        setTimeout(() => {
+            const rect = container.getBoundingClientRect();
+            burst(
+                Math.random() * rect.width,
+                Math.random() * rect.height * 0.6
+            );
+        }, i * 800);
+    }
+}
+
+initBirthdayCountdown();
+
+/* ==================================================
+   12. MEMORY TIMELINE — RELIVE MODE 📸
+   ================================================== */
+
+const reliveBtn = document.getElementById('relive-btn');
+if (reliveBtn) {
+    reliveBtn.addEventListener('click', () => {
+        const cards = document.querySelectorAll('.timeline-item');
+        if (!cards.length) return;
+
+        const narrations = [
+            'Where it all began… ✨',
+            'The first words that changed everything…',
+            'That laugh — the one I fell for 💫',
+            'Moments I replay in my heart…',
+            'And here we are — forever. 💖',
+        ];
+
+        let i = 0;
+        reliveBtn.style.pointerEvents = 'none';
+        reliveBtn.style.opacity = '0.5';
+
+        function showNext() {
+            if (i >= cards.length) {
+                // Remove narration
+                const existing = document.querySelector('.relive-narration');
+                if (existing) existing.remove();
+                reliveBtn.style.pointerEvents = '';
+                reliveBtn.style.opacity = '';
+                return;
+            }
+
+            const card = cards[i];
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            // Show narration overlay
+            let overlay = document.querySelector('.relive-narration');
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.classList.add('relive-narration');
+                document.body.appendChild(overlay);
+            }
+            overlay.innerHTML = `<p>${narrations[i] || '...'}</p>`;
+
+            i++;
+            setTimeout(showNext, 3500);
+        }
+
+        showNext();
+    });
+}
+
+/* ==================================================
+   13. PROPOSAL MODE 💍
    ================================================== */
 
 const proposalTrigger = $('#proposal-trigger');

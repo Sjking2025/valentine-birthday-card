@@ -808,11 +808,13 @@ if (reliveBtn) {
         if (!cards.length) return;
 
         const narrations = [
-            'Where it all began… ✨',
-            'The first words that changed everything…',
-            'That laugh — the one I fell for 💫',
-            'Moments I replay in my heart…',
-            'And here we are — forever. 💖',
+            'A stolen glance at the market — this is where the butterflies began ✨',
+            'That smile by the window… cherry blossoms had nothing on you 🌸',
+            'The first chapter we wrote together — hearts glowing between us 💛',
+            'A shy smile on a train journey — I saw it anyway 🚂💫',
+            'Under the blossoms, side by side — no words could say more 🌷',
+            'Golden hour by the sea — I watched you, my heart overflowing 🌅',
+            'Where sky meets sea, barefoot and together — forever begins here 💖',
         ];
 
         let i = 0;

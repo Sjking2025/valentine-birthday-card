@@ -22,7 +22,7 @@ const CONFIG = {
      * 3. Copy the hash output
      * 4. Replace the value below with the new hash
      */
-    passwordHash: '7aab8a245f583c7f619a724ebc10b8279ffd6da04703b2e514fdc75914acc263b',
+    passwordHash: '7aab8a245f583c7f619a724ebc10b8279fd6da04703b2e514fdc75914acc263b',
 
     // 🎶 Music settings
     musicFile: 'assets/music.mp3',

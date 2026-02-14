@@ -14,7 +14,7 @@ const CONFIG = {
      * The password is NEVER stored in plain text.
      * Only its SHA-256 hash is stored below.
      *
-     * Current password: "iloveyou"
+     * Current password: "Aumey"
      *
      * HOW TO CHANGE THE PASSWORD:
      * 1. Open browser console (F12 → Console)
@@ -22,7 +22,7 @@ const CONFIG = {
      * 3. Copy the hash output
      * 4. Replace the value below with the new hash
      */
-    passwordHash: 'e4ad93ca07acb8d908a3aa41e920ea4f4ef4f26e7f86cf8291c5db289780a5ae',
+    passwordHash: '7aab8a245f583c7f619a724ebc10b8279ffd6da04703b2e514fdc75914acc263b',
 
     // 🎶 Music settings
     musicFile: 'assets/music.mp3',
@@ -43,7 +43,7 @@ Happy Valentine's Day, my forever love. 💕`,
 
     // 🔑 Password hints
     maxAttempts: 3,
-    hintMessage: '💕 Hint: What do I always say to you?',
+    hintMessage: '💕 Hint: My special name for you?',
 
     // 💍 Proposal response messages
     proposalYes: 'You just made me the happiest person alive. I love you, forever and always. 💖',

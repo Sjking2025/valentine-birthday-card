@@ -1,200 +1,349 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forever Yours — A Love Letter</title>
-    <meta name="description" content="A private, cinematic love letter for Valentine's Day and a very special Birthday.">
+    <meta name="description"
+        content="A private, cinematic love letter for Valentine's Day, a very special Birthday, and a forever promise.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Italiana&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Outfit:wght@200;300;400;500&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-    <!-- ======================== -->
-    <!--   SPARKLE CANVAS (BG)    -->
-    <!-- ======================== -->
-    <canvas id="sparkle-canvas"></canvas>
+    <!-- Film grain texture overlay -->
+    <div class="grain-overlay"></div>
 
-    <!-- ======================== -->
-    <!--   PASSWORD GATE SCREEN   -->
-    <!-- ======================== -->
-    <div id="password-screen" class="password-screen">
-        <div class="password-bg-hearts" id="password-hearts"></div>
-        <div class="password-card glass-card">
-            <div class="lock-icon">🔒</div>
-            <h1 class="cursive-title glow-text">Enter Our Secret World</h1>
-            <p class="subtitle">For your eyes only, my love</p>
-            <div class="input-wrapper">
-                <input type="password" id="password-input" class="glow-input" placeholder="Enter the secret key..." autocomplete="off">
-                <div class="input-glow"></div>
+    <!-- Starry night canvas background -->
+    <canvas id="starry-canvas"></canvas>
+
+    <!-- ================================ -->
+    <!--    CINEMATIC INTRO SCREEN        -->
+    <!-- ================================ -->
+    <div id="cinematic-intro" class="cinematic-intro">
+        <div class="intro-content">
+            <div class="intro-line intro-line-1">Some stories</div>
+            <div class="intro-line intro-line-2">are meant to be</div>
+            <div class="intro-line intro-line-3"><em>felt…</em></div>
+        </div>
+        <div class="intro-loader">
+            <div class="loader-track">
+                <div class="loader-fill" id="loader-fill"></div>
             </div>
-            <button id="enter-btn" class="btn-primary ripple-btn">
-                <span>Enter</span>
-                <svg class="heart-icon" viewBox="0 0 24 24" width="18" height="18"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="currentColor"/></svg>
-            </button>
-            <p id="hint-msg" class="hint-message"></p>
-            <p class="footer-whisper">"Forever & Always"</p>
+            <span class="loader-text" id="loader-text">Loading your story...</span>
         </div>
     </div>
 
-    <!-- ======================== -->
-    <!--   CONFETTI CONTAINER     -->
-    <!-- ======================== -->
+    <!-- ================================ -->
+    <!--    PASSWORD GATE SCREEN          -->
+    <!-- ================================ -->
+    <div id="password-screen" class="password-screen">
+        <div class="password-bg-hearts" id="password-hearts"></div>
+        <!-- Decorative elements -->
+        <div class="orbit-ring orbit-ring-1"></div>
+        <div class="orbit-ring orbit-ring-2"></div>
+
+        <div class="password-layout">
+            <div class="password-left">
+                <span class="overline">— a private world —</span>
+                <h1 class="display-heading">Enter Our<br><em>Secret World</em></h1>
+                <p class="whisper-text">"Forever & Always"</p>
+            </div>
+            <div class="password-card glass-card">
+                <div class="card-accent-line"></div>
+                <div class="lock-icon">
+                    <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor"
+                        stroke-width="1.5">
+                        <rect x="3" y="11" width="18" height="11" rx="2" />
+                        <path d="M7 11V7a5 5 0 0110 0v4" />
+                    </svg>
+                </div>
+                <p class="card-label">For your eyes only</p>
+                <div class="input-wrapper">
+                    <input type="password" id="password-input" class="glow-input" placeholder="the secret key..."
+                        autocomplete="off">
+                </div>
+                <button id="enter-btn" class="btn-elegant ripple-btn">
+                    <span>Unlock</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                </button>
+                <p id="hint-msg" class="hint-message"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confetti container -->
     <div id="confetti-container"></div>
 
-    <!-- ======================== -->
-    <!--     MUSIC BUTTON         -->
-    <!-- ======================== -->
+    <!-- Music floating button -->
     <button id="music-btn" class="music-btn" title="Play Music">
-        <span class="music-icon" id="music-icon">🎵</span>
+        <span class="music-icon" id="music-icon">♫</span>
         <span class="music-label" id="music-label">Play</span>
     </button>
 
-    <!-- ======================== -->
-    <!--     MAIN CONTENT         -->
-    <!-- ======================== -->
+    <!-- ================================ -->
+    <!--       MAIN CONTENT              -->
+    <!-- ================================ -->
     <main id="main-content" class="main-content hidden">
 
-        <!-- Section 1: Welcome Romantic Intro -->
+        <!-- ---- WELCOME HERO ---- -->
         <section id="welcome" class="section section-welcome">
             <div class="parallax-bg"></div>
-            <div class="section-content fade-in-section">
-                <h1 class="cursive-title mega-title glow-text">Welcome, My Love</h1>
-                <p class="hero-subtitle">This is a world I created just for you.</p>
+            <div class="section-inner">
+                <div class="stagger-group fade-in-section">
+                    <span class="overline stagger-item">— for the one I love —</span>
+                    <h1 class="display-heading hero-title stagger-item">
+                        Welcome,<br><em>My Love</em>
+                    </h1>
+                    <p class="body-elegant stagger-item">This is a world I created just for you.</p>
+                    <div class="divider-ornament stagger-item">
+                        <span class="ornament-line"></span>
+                        <span class="ornament-diamond">◇</span>
+                        <span class="ornament-line"></span>
+                    </div>
+                </div>
                 <div class="scroll-indicator">
-                    <span class="scroll-arrow">▼</span>
+                    <div class="scroll-line"></div>
+                    <span class="scroll-text">scroll</span>
                 </div>
             </div>
         </section>
 
-        <!-- Section 2: Valentine's Message -->
+        <!-- ---- VALENTINE'S MESSAGE ---- -->
         <section id="valentine" class="section section-valentine">
-            <div class="section-content fade-in-section">
-                <h2 class="cursive-title section-heading glow-text">Happy Valentine's Day</h2>
-                <div class="tilt-card glass-card valentine-card">
-                    <div class="card-heart-decor">❤️</div>
-                    <p id="typing-text" class="typing-message"></p>
-                    <span class="typing-cursor">|</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 3: Birthday Poem Section -->
-        <section id="birthday" class="section section-birthday">
-            <div class="section-content fade-in-section">
-                <h2 class="cursive-title section-heading glow-text">Happy Birthday Da Au</h2>
-                <div class="birthday-scene">
-                    <div class="birthday-cake">
-                        <div class="cake-body">
-                            <div class="cake-layer cake-layer-1"></div>
-                            <div class="cake-layer cake-layer-2"></div>
-                            <div class="cake-layer cake-layer-3"></div>
-                            <div class="candle-row">
-                                <div class="candle"><div class="flame"></div></div>
-                                <div class="candle"><div class="flame"></div></div>
-                                <div class="candle"><div class="flame"></div></div>
-                                <div class="candle"><div class="flame"></div></div>
-                                <div class="candle"><div class="flame"></div></div>
-                            </div>
+            <div class="section-inner">
+                <div class="valentine-layout fade-in-section">
+                    <div class="valentine-heading-col">
+                        <span class="overline stagger-item">— february 14 —</span>
+                        <h2 class="display-heading section-title stagger-item">Happy<br><em>Valentine's</em><br>Day</h2>
+                        <div class="floating-heart-accent">❤</div>
+                    </div>
+                    <div class="valentine-card-col">
+                        <div class="tilt-card glass-card valentine-card">
+                            <div class="card-accent-line"></div>
+                            <p id="typing-text" class="typing-message"></p>
+                            <span class="typing-cursor">|</span>
                         </div>
                     </div>
-                    <div class="tilt-card glass-card birthday-card">
-                        <p class="poem-text">
-                            On this day, a star was born,<br>
-                            A soul so bright, a love so warm.<br>
-                            You came into this world with grace,<br>
-                            And filled my heart, my sacred space.<br><br>
-                            Every laugh, every smile you share,<br>
-                            Reminds me how much I truly care.<br>
-                            Today we celebrate the gift of you,<br>
-                            And all the magic that you do.<br><br>
-                            Happy Birthday, my dearest one,<br>
-                            My moon, my stars, my only sun. 🎂✨
+                </div>
+            </div>
+        </section>
+
+        <!-- ---- BIRTHDAY POEM ---- -->
+        <section id="birthday" class="section section-birthday">
+            <div class="section-inner">
+                <div class="birthday-layout fade-in-section">
+                    <div class="birthday-heading">
+                        <span class="overline stagger-item">— february 15 —</span>
+                        <h2 class="display-heading section-title stagger-item">Happy Birthday<br><em>Da Au</em></h2>
+                    </div>
+                    <div class="birthday-scene">
+                        <div class="birthday-cake">
+                            <div class="cake-body">
+                                <div class="candle-row">
+                                    <div class="candle">
+                                        <div class="flame"></div>
+                                    </div>
+                                    <div class="candle">
+                                        <div class="flame"></div>
+                                    </div>
+                                    <div class="candle">
+                                        <div class="flame"></div>
+                                    </div>
+                                    <div class="candle">
+                                        <div class="flame"></div>
+                                    </div>
+                                    <div class="candle">
+                                        <div class="flame"></div>
+                                    </div>
+                                </div>
+                                <div class="cake-layer cake-top"></div>
+                                <div class="cake-layer cake-mid"></div>
+                                <div class="cake-layer cake-base"></div>
+                                <div class="cake-plate"></div>
+                            </div>
+                        </div>
+                        <div class="tilt-card glass-card birthday-card">
+                            <div class="card-accent-line"></div>
+                            <p class="poem-text">
+                                On this day, a star was born,<br>
+                                A soul so bright, a love so warm.<br>
+                                You came into this world with grace,<br>
+                                And filled my heart, my sacred space.<br><br>
+                                Every laugh, every smile you share,<br>
+                                Reminds me how much I truly care.<br>
+                                Today we celebrate the gift of you,<br>
+                                And all the magic that you do.<br><br>
+                                <em>Happy Birthday, my dearest one,<br>
+                                    My moon, my stars, my only sun.</em> ✨
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ---- LOVE QUOTES ---- -->
+        <section id="quotes" class="section section-quotes">
+            <div class="section-inner">
+                <div class="fade-in-section">
+                    <div class="quotes-header">
+                        <span class="overline">— treasured words —</span>
+                        <h2 class="display-heading section-title">Our Beautiful<br><em>Moments</em></h2>
+                    </div>
+                    <div class="quotes-masonry">
+                        <div class="tilt-card glass-card quote-card quote-tall">
+                            <span class="quote-mark">"</span>
+                            <p>In all the world, there is no heart for me like yours. In all the world, there is no love
+                                for you like mine.</p>
+                            <span class="quote-flourish">~</span>
+                        </div>
+                        <div class="tilt-card glass-card quote-card">
+                            <span class="quote-mark">"</span>
+                            <p>I loved you yesterday. I love you still. I always have, and I always will.</p>
+                            <span class="quote-flourish">~</span>
+                        </div>
+                        <div class="tilt-card glass-card quote-card">
+                            <span class="quote-mark">"</span>
+                            <p>You are my today and all of my tomorrows. Every love story is beautiful, but ours is my
+                                favorite.</p>
+                            <span class="quote-flourish">~</span>
+                        </div>
+                        <div class="tilt-card glass-card quote-card quote-tall">
+                            <span class="quote-mark">"</span>
+                            <p>If I had a flower for every time you made me smile, I'd have an endless garden stretching
+                                to the horizon.</p>
+                            <span class="quote-flourish">~</span>
+                        </div>
+                        <div class="tilt-card glass-card quote-card">
+                            <span class="quote-mark">"</span>
+                            <p>I choose you. Over and over. Without pause, without doubt, in a heartbeat — I'll keep
+                                choosing you.</p>
+                            <span class="quote-flourish">~</span>
+                        </div>
+                        <div class="tilt-card glass-card quote-card">
+                            <span class="quote-mark">"</span>
+                            <p>You don't cross my mind — you live in it. Every corner, every thought, every beat.</p>
+                            <span class="quote-flourish">~</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ---- FOREVER PROMISE ---- -->
+        <section id="promise" class="section section-promise">
+            <div class="promise-vignette"></div>
+            <div class="section-inner">
+                <div class="promise-layout fade-in-section">
+                    <div class="infinity-heart">∞</div>
+                    <h2 class="display-heading mega-title">Forever<br><em>Yours</em></h2>
+                    <div class="tilt-card glass-card promise-card">
+                        <div class="card-accent-line"></div>
+                        <p class="promise-text">
+                            I promise to stand beside you in every storm,<br>
+                            to hold your hand when the world feels cold,<br>
+                            to be your shelter, your warmth, your home.<br><br>
+                            No distance, no time, no challenge<br>
+                            will ever change what I feel for you.<br><br>
+                            You are my forever. My always.<br>
+                            And even when I'm not there —<br>
+                            <span class="dramatic-text" id="dramatic-fade">know that I'm always with you.</span>
                         </p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Section 4: Memory / Love Quotes -->
-        <section id="quotes" class="section section-quotes">
-            <div class="section-content fade-in-section">
-                <h2 class="cursive-title section-heading glow-text">Our Beautiful Moments</h2>
-                <div class="quotes-grid">
-                    <div class="tilt-card glass-card quote-card">
-                        <span class="quote-mark">"</span>
-                        <p>In all the world, there is no heart for me like yours. In all the world, there is no love for you like mine.</p>
+        <!-- ---- PROPOSAL MODE ---- -->
+        <section id="proposal" class="section section-proposal">
+            <div class="proposal-vignette"></div>
+            <div class="section-inner">
+                <div class="proposal-layout fade-in-section">
+                    <div class="proposal-trigger-area">
+                        <button id="proposal-trigger" class="btn-elegant proposal-btn">
+                            <span>💍</span>
+                            <span>One More Thing...</span>
+                        </button>
                     </div>
-                    <div class="tilt-card glass-card quote-card">
-                        <span class="quote-mark">"</span>
-                        <p>I loved you yesterday. I love you still. I always have, and I always will.</p>
-                    </div>
-                    <div class="tilt-card glass-card quote-card">
-                        <span class="quote-mark">"</span>
-                        <p>You are my today and all of my tomorrows. Every love story is beautiful, but ours is my favorite.</p>
-                    </div>
-                    <div class="tilt-card glass-card quote-card">
-                        <span class="quote-mark">"</span>
-                        <p>If I had a flower for every time you made me smile and laugh, I'd have an endless garden.</p>
-                    </div>
-                    <div class="tilt-card glass-card quote-card">
-                        <span class="quote-mark">"</span>
-                        <p>I choose you. And I'll choose you over and over. Without pause, without a doubt, in a heartbeat — I'll keep choosing you.</p>
-                    </div>
-                    <div class="tilt-card glass-card quote-card">
-                        <span class="quote-mark">"</span>
-                        <p>You don't cross my mind — you live in it. Every corner, every thought, every beat of my heart.</p>
+                    <div id="proposal-reveal" class="proposal-reveal hidden">
+                        <div class="heartbeat-ring"></div>
+                        <div class="proposal-content">
+                            <p class="proposal-pretext">I've been wanting to ask you something...</p>
+                            <h2 class="display-heading proposal-question">
+                                Will you stay with me<br><em>forever?</em>
+                            </h2>
+                            <div class="proposal-buttons">
+                                <button class="proposal-answer-btn btn-yes" id="btn-yes">
+                                    <span>Yes</span> 💖
+                                </button>
+                                <button class="proposal-answer-btn btn-always" id="btn-always">
+                                    <span>Always</span> 💞
+                                </button>
+                            </div>
+                            <p id="proposal-response" class="proposal-response"></p>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Section 5: Forever Promise -->
-        <section id="promise" class="section section-promise">
-            <div class="section-content fade-in-section">
-                <h2 class="cursive-title mega-title glow-text">Forever Yours</h2>
-                <div class="infinity-heart">∞ ❤️</div>
-                <div class="tilt-card glass-card promise-card">
-                    <p class="promise-text">
-                        I promise to stand beside you in every storm,<br>
-                        to hold your hand when the world feels cold,<br>
-                        to be your shelter, your warmth, your home.<br><br>
-                        No distance, no time, no challenge<br>
-                        will ever change what I feel for you.<br><br>
-                        You are my forever. My always.<br>
-                        And even when I'm not there — <br>
-                        <span class="dramatic-text" id="dramatic-fade">know that I'm always with you.</span>
-                    </p>
+        <!-- ---- QR CODE SECTION ---- -->
+        <section id="qr-section" class="section section-qr">
+            <div class="section-inner">
+                <div class="qr-layout fade-in-section">
+                    <span class="overline">— share our world —</span>
+                    <h2 class="display-heading section-title">Scan to Enter<br><em>Our World</em></h2>
+                    <div class="qr-frame glass-card">
+                        <div class="card-accent-line"></div>
+                        <canvas id="qr-canvas" width="200" height="200"></canvas>
+                        <p class="qr-label">Scan with your phone camera</p>
+                    </div>
+                    <button id="download-qr" class="btn-elegant">
+                        <span>Download QR</span>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" />
+                        </svg>
+                    </button>
                 </div>
             </div>
         </section>
 
-        <!-- Section 6: Signature Ending -->
+        <!-- ---- SIGNATURE ENDING ---- -->
         <section id="signature" class="section section-signature">
-            <div class="section-content fade-in-section">
-                <div class="signature-content">
-                    <h2 class="cursive-title mega-title glow-text signature-reveal">With All My Love,<br>Forever & Always</h2>
-                    <div class="pulse-heart">❤️</div>
-                    <div class="golden-line"></div>
-                    <p class="made-with-love">Made with ❤️ just for you</p>
+            <div class="section-inner">
+                <div class="signature-layout fade-in-section">
+                    <div class="signature-content">
+                        <div class="golden-line-wide"></div>
+                        <h2 class="display-heading signature-title">With All My Love,<br><em>Forever & Always</em></h2>
+                        <div class="pulse-heart">❤</div>
+                        <div class="golden-line-wide"></div>
+                        <p class="made-with-love">Made with ❤ just for you</p>
+                    </div>
                 </div>
             </div>
         </section>
 
     </main>
 
-    <!-- ======================== -->
-    <!--     FLOATING HEARTS      -->
-    <!-- ======================== -->
+    <!-- Floating hearts layer -->
     <div id="floating-hearts"></div>
 
-    <!-- Audio element for background music -->
+    <!-- Background music -->
     <audio id="bg-music" loop preload="auto">
         <source src="assets/music.mp3" type="audio/mpeg">
     </audio>
 
     <script src="script.js"></script>
 </body>
+
 </html>

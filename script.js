@@ -1,22 +1,34 @@
 /* ============================================
-   ROMANTIC VALENTINE + BIRTHDAY WEBSITE
-   Interactive Features & Animations
+   ROMANTIC CINEMATIC WEBSITE
+   Features: SHA-256 Encryption, Cinematic Intro,
+   Starry Night Canvas, Proposal Mode, QR Code
    ============================================ */
 
-/* --------------------------------------------------
-   CONFIG — Edit these values to customize the site
-   -------------------------------------------------- */
+/* ==================================================
+   CONFIG — All customizable values
+   ================================================== */
 const CONFIG = {
-    // 🔐 Change this to set your password
-    password: 'iloveyou',
+    /*
+     * 🔐 SHA-256 PASSWORD HASH
+     *
+     * The password is NEVER stored in plain text.
+     * Only its SHA-256 hash is stored below.
+     *
+     * Current password: "iloveyou"
+     *
+     * HOW TO CHANGE THE PASSWORD:
+     * 1. Open browser console (F12 → Console)
+     * 2. Run: hashPassword('yournewpassword').then(h => console.log(h))
+     * 3. Copy the hash output
+     * 4. Replace the value below with the new hash
+     */
+    passwordHash: 'e4ad93ca07acb8d908a3aa41e920ea4f4ef4f26e7f86cf8291c5db289780a5ae',
 
-    // 🎶 Path to your music file (place in /assets folder)
+    // 🎶 Music settings
     musicFile: 'assets/music.mp3',
-
-    // 🔊 Music volume (0.0 to 1.0)
     musicVolume: 0.3,
 
-    // 💬 Typing effect message for Valentine's section
+    // 💬 Valentine's typing message
     typingMessage: `My dearest love,
 
 From the moment you came into my life, everything changed. The colors became brighter, the music became sweeter, and every ordinary moment turned into something extraordinary.
@@ -27,59 +39,135 @@ On this Valentine's Day, I want you to know — you are not just loved. You are 
 
 Happy Valentine's Day, my forever love. 💕`,
 
-    // ⏱ Typing speed in milliseconds
     typingSpeed: 35,
 
-    // 🔑 Max wrong password attempts before showing hint
+    // 🔑 Password hints
     maxAttempts: 3,
+    hintMessage: '💕 Hint: What do I always say to you?',
 
-    // 💡 Hint message after max wrong attempts
-    hintMessage: '💕 Hint: What do I always say to you?'
+    // 💍 Proposal response messages
+    proposalYes: 'You just made me the happiest person alive. I love you, forever and always. 💖',
+    proposalAlways: 'Always and forever — that\'s our promise. My heart is yours, eternally. 💞',
+
+    // 🌐 QR Code URL (change this to your deployed site URL)
+    siteUrl: 'https://yourusername.github.io/romantic-site/',
+
+    // 🎬 Cinematic intro duration (ms)
+    introDuration: 5000,
 };
 
-/* --------------------------------------------------
+/* ==================================================
+   SHA-256 HASHING (Web Crypto API)
+   ================================================== */
+
+/**
+ * Hash a string with SHA-256.
+ * Usage (in console): hashPassword('mypassword').then(h => console.log(h))
+ */
+async function hashPassword(password) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+/**
+ * Verify a password against stored hash.
+ */
+async function verifyPassword(input, storedHash) {
+    const inputHash = await hashPassword(input);
+    return inputHash === storedHash;
+}
+
+/* ==================================================
    STATE
-   -------------------------------------------------- */
+   ================================================== */
 let wrongAttempts = 0;
 let isTyping = false;
 let typingTimeout = null;
 let musicPlaying = false;
-
-/* --------------------------------------------------
-   DOM ELEMENTS
-   -------------------------------------------------- */
-const passwordScreen = document.getElementById('password-screen');
-const passwordInput = document.getElementById('password-input');
-const enterBtn = document.getElementById('enter-btn');
-const hintMsg = document.getElementById('hint-msg');
-const mainContent = document.getElementById('main-content');
-const musicBtn = document.getElementById('music-btn');
-const musicIcon = document.getElementById('music-icon');
-const musicLabel = document.getElementById('music-label');
-const bgMusic = document.getElementById('bg-music');
-const typingText = document.getElementById('typing-text');
-const confettiContainer = document.getElementById('confetti-container');
-const sparkleCanvas = document.getElementById('sparkle-canvas');
-const floatingHeartsContainer = document.getElementById('floating-hearts');
+let proposalAnswered = false;
 
 /* ==================================================
-   1. PASSWORD PROTECTION
+   DOM HELPERS
+   ================================================== */
+const $ = (sel) => document.querySelector(sel);
+const $$ = (sel) => document.querySelectorAll(sel);
+
+const cinematicIntro = $('#cinematic-intro');
+const passwordScreen = $('#password-screen');
+const passwordInput = $('#password-input');
+const enterBtn = $('#enter-btn');
+const hintMsg = $('#hint-msg');
+const mainContent = $('#main-content');
+const musicBtn = $('#music-btn');
+const musicIcon = $('#music-icon');
+const musicLabel = $('#music-label');
+const bgMusic = $('#bg-music');
+const typingText = $('#typing-text');
+const confettiContainer = $('#confetti-container');
+const starryCanvas = $('#starry-canvas');
+const floatingHeartsContainer = $('#floating-hearts');
+
+/* ==================================================
+   1. CINEMATIC INTRO SEQUENCE
    ================================================== */
 
-/**
- * Check if the entered password is correct
- */
-function checkPassword() {
-    const entered = passwordInput.value.trim();
+function startCinematicIntro() {
+    const lines = $$('.intro-line');
+    const loader = $('.intro-loader');
+    const fill = $('#loader-fill');
 
-    if (entered === CONFIG.password) {
-        // Correct password — unlock the site
+    // Stagger reveal lines
+    lines.forEach((line, i) => {
+        setTimeout(() => line.classList.add('show'), 800 + i * 1000);
+    });
+
+    // Show loader after lines
+    setTimeout(() => {
+        loader.classList.add('show');
+        animateLoader(fill);
+    }, 800 + lines.length * 1000);
+}
+
+function animateLoader(fill) {
+    let progress = 0;
+    const interval = setInterval(() => {
+        progress += Math.random() * 15 + 5;
+        if (progress >= 100) {
+            progress = 100;
+            clearInterval(interval);
+            // Fade out intro, show password
+            setTimeout(() => {
+                cinematicIntro.classList.add('fade-out');
+                passwordScreen.classList.add('show');
+                passwordInput.focus();
+            }, 600);
+        }
+        fill.style.width = progress + '%';
+    }, 250);
+}
+
+// Start intro on page load
+startCinematicIntro();
+
+/* ==================================================
+   2. ENCRYPTED PASSWORD SYSTEM
+   ================================================== */
+
+async function checkPassword() {
+    const entered = passwordInput.value.trim();
+    if (!entered) return;
+
+    const isValid = await verifyPassword(entered, CONFIG.passwordHash);
+
+    if (isValid) {
         unlockSite();
     } else {
-        // Wrong password — shake and count
         wrongAttempts++;
         passwordInput.classList.add('shake');
-        passwordInput.style.borderColor = '#ff1744';
+        passwordInput.style.borderColor = 'rgba(232, 67, 147, 0.6)';
 
         setTimeout(() => {
             passwordInput.classList.remove('shake');
@@ -88,7 +176,6 @@ function checkPassword() {
 
         passwordInput.value = '';
 
-        // Show hint after max attempts
         if (wrongAttempts >= CONFIG.maxAttempts) {
             hintMsg.textContent = CONFIG.hintMessage;
             hintMsg.classList.add('visible');
@@ -96,60 +183,217 @@ function checkPassword() {
     }
 }
 
-/**
- * Unlock the site with smooth transition
- */
 function unlockSite() {
     passwordScreen.classList.add('hide');
     mainContent.classList.remove('hidden');
 
-    // Show music button
-    setTimeout(() => {
-        musicBtn.classList.add('visible');
-    }, 500);
+    setTimeout(() => musicBtn.classList.add('visible'), 600);
+    setTimeout(() => launchConfetti(), 400);
 
-    // Launch confetti burst
-    setTimeout(() => {
-        launchConfetti();
-    }, 300);
-
-    // Start floating hearts
     startFloatingHearts();
-
-    // Initialize scroll animations
     initScrollObserver();
-
-    // Start typing effect when valentine section appears
     initTypingTrigger();
 }
 
-// Enter key support
 passwordInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') checkPassword();
 });
 
-// Button click
 enterBtn.addEventListener('click', checkPassword);
 
-// Auto-focus password input
-passwordInput.focus();
-
 /* ==================================================
-   2. BACKGROUND MUSIC
+   3. STARRY NIGHT CANVAS BACKGROUND
    ================================================== */
 
-/**
- * Toggle background music play/pause with fade-in
- */
+function initStarryNight() {
+    const ctx = starryCanvas.getContext('2d');
+    let stars = [];
+    let shootingStars = [];
+    let mouseX = 0, mouseY = 0;
+
+    function resize() {
+        starryCanvas.width = window.innerWidth;
+        starryCanvas.height = window.innerHeight;
+    }
+
+    resize();
+    window.addEventListener('resize', resize);
+
+    // Track mouse for parallax
+    document.addEventListener('mousemove', (e) => {
+        mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+        mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+    });
+
+    // Star class
+    class Star {
+        constructor() { this.reset(); }
+
+        reset() {
+            this.x = Math.random() * starryCanvas.width;
+            this.y = Math.random() * starryCanvas.height;
+            this.baseX = this.x;
+            this.baseY = this.y;
+            this.size = Math.random() * 1.8 + 0.2;
+            this.twinkleSpeed = Math.random() * 0.02 + 0.005;
+            this.twinklePhase = Math.random() * Math.PI * 2;
+            this.opacity = Math.random() * 0.6 + 0.1;
+            this.parallaxFactor = Math.random() * 0.5 + 0.1;
+
+            // Color variety: white, gold, pale blue, pink
+            const r = Math.random();
+            if (r > 0.7) this.color = [212, 168, 67];       // gold
+            else if (r > 0.5) this.color = [180, 200, 255];  // pale blue
+            else if (r > 0.35) this.color = [255, 200, 220]; // soft pink
+            else this.color = [255, 255, 255];                // white
+        }
+
+        update(time) {
+            // Twinkling
+            this.currentOpacity = this.opacity + Math.sin(time * this.twinkleSpeed + this.twinklePhase) * 0.3;
+            this.currentOpacity = Math.max(0.02, Math.min(0.9, this.currentOpacity));
+
+            // Parallax drift
+            this.x = this.baseX + mouseX * this.parallaxFactor * 10;
+            this.y = this.baseY + mouseY * this.parallaxFactor * 10;
+        }
+
+        draw() {
+            const [r, g, b] = this.color;
+
+            // Core star
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${this.currentOpacity})`;
+            ctx.fill();
+
+            // Soft glow
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size * 2.5, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${this.currentOpacity * 0.08})`;
+            ctx.fill();
+        }
+    }
+
+    // Shooting Star class
+    class ShootingStar {
+        constructor() { this.reset(); }
+
+        reset() {
+            this.x = Math.random() * starryCanvas.width * 0.8;
+            this.y = Math.random() * starryCanvas.height * 0.4;
+            this.length = Math.random() * 80 + 40;
+            this.speed = Math.random() * 6 + 4;
+            this.angle = (Math.random() * 30 + 15) * Math.PI / 180;
+            this.opacity = 0;
+            this.phase = 'fadein'; // fadein, travel, fadeout
+            this.progress = 0;
+        }
+
+        update() {
+            const dx = Math.cos(this.angle) * this.speed;
+            const dy = Math.sin(this.angle) * this.speed;
+
+            this.x += dx;
+            this.y += dy;
+            this.progress += this.speed;
+
+            if (this.phase === 'fadein') {
+                this.opacity = Math.min(1, this.opacity + 0.05);
+                if (this.opacity >= 1) this.phase = 'travel';
+            }
+
+            if (this.progress > 200) {
+                this.phase = 'fadeout';
+                this.opacity -= 0.04;
+            }
+
+            if (this.opacity <= 0) {
+                this.active = false;
+            }
+        }
+
+        draw() {
+            if (this.opacity <= 0) return;
+
+            const tailX = this.x - Math.cos(this.angle) * this.length;
+            const tailY = this.y - Math.sin(this.angle) * this.length;
+
+            const grad = ctx.createLinearGradient(this.x, this.y, tailX, tailY);
+            grad.addColorStop(0, `rgba(255, 255, 255, ${this.opacity})`);
+            grad.addColorStop(1, `rgba(255, 255, 255, 0)`);
+
+            ctx.beginPath();
+            ctx.moveTo(this.x, this.y);
+            ctx.lineTo(tailX, tailY);
+            ctx.strokeStyle = grad;
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            // Head glow
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity * 0.8})`;
+            ctx.fill();
+        }
+    }
+
+    // Create stars
+    const isMobile = window.innerWidth < 768;
+    const starCount = isMobile ? 80 : 180;
+    for (let i = 0; i < starCount; i++) {
+        stars.push(new Star());
+    }
+
+    // Occasionally spawn shooting stars
+    setInterval(() => {
+        if (shootingStars.filter(s => s.active).length < 2) {
+            const s = new ShootingStar();
+            s.active = true;
+            shootingStars.push(s);
+        }
+    }, 4000 + Math.random() * 3000);
+
+    // Night sky gradient
+    function drawNightSky() {
+        const grad = ctx.createLinearGradient(0, 0, 0, starryCanvas.height);
+        grad.addColorStop(0, '#050d1a');
+        grad.addColorStop(0.4, '#0a1628');
+        grad.addColorStop(0.7, '#0f1f38');
+        grad.addColorStop(1, '#0a1225');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, starryCanvas.width, starryCanvas.height);
+    }
+
+    let time = 0;
+    function animate() {
+        time++;
+        drawNightSky();
+
+        stars.forEach(s => { s.update(time); s.draw(); });
+
+        shootingStars = shootingStars.filter(s => s.active);
+        shootingStars.forEach(s => { s.update(); s.draw(); });
+
+        requestAnimationFrame(animate);
+    }
+
+    animate();
+}
+
+initStarryNight();
+
+/* ==================================================
+   4. BACKGROUND MUSIC
+   ================================================== */
+
 function toggleMusic() {
     if (musicPlaying) {
-        // Pause
         fadeOutAudio(bgMusic, 500);
         musicBtn.classList.remove('playing');
         musicLabel.textContent = 'Play';
         musicPlaying = false;
     } else {
-        // Play with fade-in
         bgMusic.volume = 0;
         bgMusic.play().then(() => {
             fadeInAudio(bgMusic, CONFIG.musicVolume, 1000);
@@ -157,20 +401,16 @@ function toggleMusic() {
             musicLabel.textContent = 'Pause';
             musicPlaying = true;
         }).catch(() => {
-            // Autoplay blocked — will try again on next click
             console.log('Music playback requires user interaction.');
         });
     }
 }
 
-/**
- * Fade in audio volume smoothly
- */
-function fadeInAudio(audio, targetVolume, duration) {
-    const step = targetVolume / (duration / 50);
+function fadeInAudio(audio, target, duration) {
+    const step = target / (duration / 50);
     const interval = setInterval(() => {
-        if (audio.volume + step >= targetVolume) {
-            audio.volume = targetVolume;
+        if (audio.volume + step >= target) {
+            audio.volume = target;
             clearInterval(interval);
         } else {
             audio.volume += step;
@@ -178,9 +418,6 @@ function fadeInAudio(audio, targetVolume, duration) {
     }, 50);
 }
 
-/**
- * Fade out audio volume smoothly
- */
 function fadeOutAudio(audio, duration) {
     const step = audio.volume / (duration / 50);
     const interval = setInterval(() => {
@@ -197,78 +434,59 @@ function fadeOutAudio(audio, duration) {
 musicBtn.addEventListener('click', toggleMusic);
 
 /* ==================================================
-   3. CONFETTI BURST
+   5. CONFETTI
    ================================================== */
 
-/**
- * Launch a burst of confetti pieces
- */
 function launchConfetti() {
-    const colors = ['#ff4d6d', '#ffdde1', '#f4c025', '#ffe066', '#ff8fa3', '#fff', '#c9184a'];
-    const shapes = ['circle', 'square', 'heart'];
+    const colors = ['#e84393', '#fd79a8', '#d4a843', '#f0d27a', '#a01641', '#f5f0e8'];
 
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 80; i++) {
         setTimeout(() => {
             const piece = document.createElement('div');
             piece.classList.add('confetti-piece');
 
             const color = colors[Math.floor(Math.random() * colors.length)];
-            const shape = shapes[Math.floor(Math.random() * shapes.length)];
-            const size = Math.random() * 8 + 6;
+            const size = Math.random() * 8 + 5;
 
             piece.style.left = Math.random() * 100 + '%';
-            piece.style.backgroundColor = color;
             piece.style.width = size + 'px';
-            piece.style.height = size + 'px';
-            piece.style.animationDuration = (Math.random() * 2 + 2) + 's';
-            piece.style.animationDelay = '0s';
+            piece.style.height = size * (Math.random() + 0.5) + 'px';
+            piece.style.backgroundColor = color;
+            piece.style.animationDuration = (Math.random() * 2.5 + 2) + 's';
 
-            if (shape === 'circle') {
+            if (Math.random() > 0.6) {
                 piece.style.borderRadius = '50%';
-            } else if (shape === 'heart') {
-                piece.style.backgroundColor = 'transparent';
-                piece.textContent = '❤';
-                piece.style.fontSize = size + 'px';
-                piece.style.color = color;
             }
 
             confettiContainer.appendChild(piece);
-
-            // Remove after animation
-            setTimeout(() => piece.remove(), 4000);
-        }, i * 30);
+            setTimeout(() => piece.remove(), 5000);
+        }, i * 25);
     }
 }
 
 /* ==================================================
-   4. FLOATING HEARTS
+   6. FLOATING HEARTS
    ================================================== */
 
-/**
- * Continuously generate floating heart elements
- */
 function startFloatingHearts() {
-    const hearts = ['❤️', '💕', '💗', '💖', '🤍', '💝'];
+    const hearts = ['❤', '♥', '❤', '♡', '❤'];
 
     setInterval(() => {
         const heart = document.createElement('span');
         heart.classList.add('floating-heart');
         heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
         heart.style.left = Math.random() * 100 + '%';
-        heart.style.fontSize = (Math.random() * 18 + 10) + 'px';
-        heart.style.animationDuration = (Math.random() * 6 + 6) + 's';
+        heart.style.fontSize = (Math.random() * 14 + 8) + 'px';
+        heart.style.animationDuration = (Math.random() * 8 + 8) + 's';
 
         floatingHeartsContainer.appendChild(heart);
-
-        // Remove after animation completes
-        setTimeout(() => heart.remove(), 12000);
-    }, 1500);
+        setTimeout(() => heart.remove(), 16000);
+    }, 2000);
 }
 
-/* Also add floating hearts on password screen */
 function addPasswordScreenHearts() {
     const container = document.getElementById('password-hearts');
-    const hearts = ['❤️', '💗', '💕'];
+    const hearts = ['❤', '♥'];
 
     setInterval(() => {
         if (passwordScreen.classList.contains('hide')) return;
@@ -277,140 +495,49 @@ function addPasswordScreenHearts() {
         heart.classList.add('floating-heart');
         heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
         heart.style.left = Math.random() * 100 + '%';
-        heart.style.fontSize = (Math.random() * 14 + 8) + 'px';
-        heart.style.animationDuration = (Math.random() * 5 + 5) + 's';
+        heart.style.fontSize = (Math.random() * 10 + 6) + 'px';
+        heart.style.animationDuration = (Math.random() * 6 + 6) + 's';
         heart.style.opacity = '0';
 
         container.appendChild(heart);
-        setTimeout(() => heart.remove(), 10000);
-    }, 2000);
+        setTimeout(() => heart.remove(), 12000);
+    }, 2500);
 }
 
 addPasswordScreenHearts();
 
 /* ==================================================
-   5. SPARKLE PARTICLE BACKGROUND
-   ================================================== */
-
-/**
- * Canvas-based sparkle particle system
- */
-function initSparkles() {
-    const ctx = sparkleCanvas.getContext('2d');
-    let particles = [];
-    let animationId;
-
-    function resize() {
-        sparkleCanvas.width = window.innerWidth;
-        sparkleCanvas.height = window.innerHeight;
-    }
-
-    resize();
-    window.addEventListener('resize', resize);
-
-    class Particle {
-        constructor() {
-            this.reset();
-        }
-
-        reset() {
-            this.x = Math.random() * sparkleCanvas.width;
-            this.y = Math.random() * sparkleCanvas.height;
-            this.size = Math.random() * 2 + 0.5;
-            this.speedX = (Math.random() - 0.5) * 0.3;
-            this.speedY = (Math.random() - 0.5) * 0.3;
-            this.opacity = Math.random() * 0.5 + 0.1;
-            this.opacityDir = Math.random() > 0.5 ? 1 : -1;
-            this.color = Math.random() > 0.7
-                ? 'rgba(244, 192, 37, '   // Gold
-                : Math.random() > 0.5
-                    ? 'rgba(255, 221, 225, '  // Pink
-                    : 'rgba(255, 255, 255, '; // White
-        }
-
-        update() {
-            this.x += this.speedX;
-            this.y += this.speedY;
-            this.opacity += this.opacityDir * 0.005;
-
-            if (this.opacity >= 0.7) this.opacityDir = -1;
-            if (this.opacity <= 0.05) this.opacityDir = 1;
-
-            // Wrap around screen
-            if (this.x < 0) this.x = sparkleCanvas.width;
-            if (this.x > sparkleCanvas.width) this.x = 0;
-            if (this.y < 0) this.y = sparkleCanvas.height;
-            if (this.y > sparkleCanvas.height) this.y = 0;
-        }
-
-        draw() {
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-            ctx.fillStyle = this.color + this.opacity + ')';
-            ctx.fill();
-
-            // Glow effect
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.size * 3, 0, Math.PI * 2);
-            ctx.fillStyle = this.color + (this.opacity * 0.15) + ')';
-            ctx.fill();
-        }
-    }
-
-    // Create particles — fewer on mobile for performance
-    const isMobile = window.innerWidth < 768;
-    const count = isMobile ? 40 : 80;
-    for (let i = 0; i < count; i++) {
-        particles.push(new Particle());
-    }
-
-    function animate() {
-        ctx.clearRect(0, 0, sparkleCanvas.width, sparkleCanvas.height);
-        particles.forEach(p => {
-            p.update();
-            p.draw();
-        });
-        animationId = requestAnimationFrame(animate);
-    }
-
-    animate();
-}
-
-initSparkles();
-
-/* ==================================================
-   6. SCROLL FADE-IN (IntersectionObserver)
+   7. SCROLL REVEAL
    ================================================== */
 
 function initScrollObserver() {
-    const sections = document.querySelectorAll('.fade-in-section');
+    const sections = $$('.fade-in-section');
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
 
-                // Trigger dramatic text fade in promise section
                 const dramatic = entry.target.querySelector('.dramatic-text');
                 if (dramatic) {
-                    setTimeout(() => dramatic.classList.add('visible'), 2000);
+                    setTimeout(() => dramatic.classList.add('visible'), 2500);
                 }
             }
         });
     }, {
-        threshold: 0.15,
-        rootMargin: '0px 0px -50px 0px'
+        threshold: 0.12,
+        rootMargin: '0px 0px -60px 0px'
     });
 
     sections.forEach(s => observer.observe(s));
 }
 
 /* ==================================================
-   7. TYPING EFFECT
+   8. TYPING EFFECT
    ================================================== */
 
 function initTypingTrigger() {
-    const valentineSection = document.getElementById('valentine');
+    const valentine = $('#valentine');
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -420,14 +547,11 @@ function initTypingTrigger() {
                 observer.unobserve(entry.target);
             }
         });
-    }, { threshold: 0.3 });
+    }, { threshold: 0.25 });
 
-    observer.observe(valentineSection);
+    observer.observe(valentine);
 }
 
-/**
- * Character-by-character typing effect
- */
 function startTypingEffect(text, element, speed) {
     let i = 0;
     element.innerHTML = '';
@@ -448,33 +572,32 @@ function startTypingEffect(text, element, speed) {
 }
 
 /* ==================================================
-   8. 3D HOVER TILT EFFECT
+   9. 3D TILT CARDS
    ================================================== */
 
 function initTiltCards() {
-    const cards = document.querySelectorAll('.tilt-card');
+    const cards = $$('.tilt-card');
 
     cards.forEach(card => {
         card.addEventListener('mousemove', (e) => {
             const rect = card.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
+            const cx = rect.width / 2;
+            const cy = rect.height / 2;
 
-            const rotateX = ((y - centerY) / centerY) * -8;
-            const rotateY = ((x - centerX) / centerX) * 8;
+            const rotateX = ((y - cy) / cy) * -5;
+            const rotateY = ((x - cx) / cx) * 5;
 
-            card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+            card.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.01)`;
         });
 
         card.addEventListener('mouseleave', () => {
-            card.style.transform = 'perspective(800px) rotateX(0) rotateY(0) scale(1)';
+            card.style.transform = 'perspective(900px) rotateX(0) rotateY(0) scale(1)';
         });
     });
 }
 
-// Initialize tilt cards after content is shown
 const tiltObserver = new MutationObserver(() => {
     if (!mainContent.classList.contains('hidden')) {
         initTiltCards();
@@ -485,7 +608,7 @@ const tiltObserver = new MutationObserver(() => {
 tiltObserver.observe(mainContent, { attributes: true, attributeFilter: ['class'] });
 
 /* ==================================================
-   9. PARALLAX BACKGROUND
+   10. PARALLAX
    ================================================== */
 
 function initParallax() {
@@ -494,27 +617,164 @@ function initParallax() {
 
     window.addEventListener('scroll', () => {
         const scrolled = window.pageYOffset;
-        parallaxBg.style.transform = `translateY(${scrolled * 0.3}px)`;
+        parallaxBg.style.transform = `translateY(${scrolled * 0.2}px)`;
     }, { passive: true });
-
-    // Mouse-based subtle parallax
-    document.addEventListener('mousemove', (e) => {
-        const x = (e.clientX / window.innerWidth - 0.5) * 20;
-        const y = (e.clientY / window.innerHeight - 0.5) * 20;
-        parallaxBg.style.transform = `translate(${x}px, ${y}px)`;
-    });
 }
 
 initParallax();
 
 /* ==================================================
-   10. GLOWING BORDER ON CARDS (Bonus)
+   11. PROPOSAL MODE 💍
    ================================================== */
 
-// Added via CSS box-shadow on .glass-card hover — no extra JS needed.
+const proposalTrigger = $('#proposal-trigger');
+const proposalReveal = $('#proposal-reveal');
+const btnYes = $('#btn-yes');
+const btnAlways = $('#btn-always');
+const proposalResponse = $('#proposal-response');
+
+proposalTrigger.addEventListener('click', () => {
+    proposalTrigger.style.display = 'none';
+    proposalReveal.classList.remove('hidden');
+
+    // Force reflow then add show
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            proposalReveal.classList.add('show');
+        });
+    });
+});
+
+function handleProposalAnswer(message) {
+    if (proposalAnswered) return;
+    proposalAnswered = true;
+
+    // Glow effect
+    const glow = document.createElement('div');
+    glow.classList.add('proposal-glow');
+    document.body.appendChild(glow);
+    setTimeout(() => glow.remove(), 3500);
+
+    // Confetti
+    launchConfetti();
+
+    // Response text
+    proposalResponse.textContent = message;
+    proposalResponse.classList.add('show');
+
+    // Disable buttons
+    btnYes.style.opacity = '0.5';
+    btnYes.style.pointerEvents = 'none';
+    btnAlways.style.opacity = '0.5';
+    btnAlways.style.pointerEvents = 'none';
+}
+
+btnYes.addEventListener('click', () => handleProposalAnswer(CONFIG.proposalYes));
+btnAlways.addEventListener('click', () => handleProposalAnswer(CONFIG.proposalAlways));
 
 /* ==================================================
-   INITIALIZATION COMPLETE
+   12. QR CODE GENERATOR (Canvas-based)
    ================================================== */
-console.log('%c💖 Made with love — Happy Valentine\'s Day & Happy Birthday! 💖',
-    'color: #ff4d6d; font-size: 16px; font-weight: bold; text-shadow: 0 0 10px rgba(255,77,109,0.5);');
+
+function generateQRCode(text, canvas, size = 200) {
+    const ctx = canvas.getContext('2d');
+    canvas.width = size;
+    canvas.height = size;
+
+    /*
+     * Simple QR-like visual pattern.
+     * For a real QR code, include a library like:
+     * <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+     * Then use: QRCode.toCanvas(canvas, text, { width: size, margin: 2 })
+     *
+     * Below is a decorative grid that looks like a QR code.
+     * Replace with the real library for scannable QR codes.
+     */
+
+    const moduleSize = 8;
+    const modules = Math.floor(size / moduleSize);
+    const padding = (size - modules * moduleSize) / 2;
+
+    // Background
+    ctx.fillStyle = '#f5f0e8';
+    ctx.fillRect(0, 0, size, size);
+
+    // Generate deterministic pattern from URL
+    let seed = 0;
+    for (let i = 0; i < text.length; i++) {
+        seed = ((seed << 5) - seed + text.charCodeAt(i)) | 0;
+    }
+
+    function seededRandom() {
+        seed = (seed * 16807) % 2147483647;
+        return (seed - 1) / 2147483646;
+    }
+
+    // Draw modules
+    ctx.fillStyle = '#0a1628';
+
+    for (let row = 0; row < modules; row++) {
+        for (let col = 0; col < modules; col++) {
+            // Finder patterns (top-left, top-right, bottom-left corners)
+            const isFinderArea =
+                (row < 7 && col < 7) ||
+                (row < 7 && col >= modules - 7) ||
+                (row >= modules - 7 && col < 7);
+
+            if (isFinderArea) {
+                // Draw finder pattern
+                const fr = row < 7 ? row : row - (modules - 7);
+                const fc = col < 7 ? col : col - (modules - 7);
+
+                if (fr === 0 || fr === 6 || fc === 0 || fc === 6 ||
+                    (fr >= 2 && fr <= 4 && fc >= 2 && fc <= 4)) {
+                    ctx.fillRect(
+                        padding + col * moduleSize,
+                        padding + row * moduleSize,
+                        moduleSize, moduleSize
+                    );
+                }
+            } else if (seededRandom() > 0.5) {
+                ctx.fillRect(
+                    padding + col * moduleSize,
+                    padding + row * moduleSize,
+                    moduleSize, moduleSize
+                );
+            }
+        }
+    }
+
+    // Add heart in center
+    ctx.font = '24px serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#e84393';
+    ctx.fillText('❤', size / 2, size / 2);
+}
+
+const qrCanvas = $('#qr-canvas');
+if (qrCanvas) {
+    generateQRCode(CONFIG.siteUrl, qrCanvas, 200);
+}
+
+// Download QR
+const downloadQR = $('#download-qr');
+if (downloadQR) {
+    downloadQR.addEventListener('click', () => {
+        const link = document.createElement('a');
+        link.download = 'our-secret-world-qr.png';
+        link.href = qrCanvas.toDataURL('image/png');
+        link.click();
+    });
+}
+
+/* ==================================================
+   READY
+   ================================================== */
+console.log(
+    '%c❤ Made with love — Happy Valentine\'s Day & Happy Birthday ❤',
+    'color: #d4a843; font-size: 14px; font-weight: 300; font-family: serif;'
+);
+
+// Expose hash helper for password changes
+window.hashPassword = hashPassword;

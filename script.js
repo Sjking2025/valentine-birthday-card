@@ -809,9 +809,13 @@ if (reliveBtn) {
 
         const narrations = [
             'A stolen glance at the market — this is where the butterflies began ✨',
+            'Hiding your smile in the hallway — school days and secret glances 📚',
+            'Walking and texting, waiting for your reply — the start of something beautiful 📱',
             'That smile by the window… cherry blossoms had nothing on you 🌸',
+            'Sitting close, hearts racing — realizing this was forever 💑',
             'The first chapter we wrote together — hearts glowing between us 💛',
             'A shy smile on a train journey — I saw it anyway 🚂💫',
+            'Flowers in your hair, wind in the air — simply breathtaking 🌺',
             'Under the blossoms, side by side — no words could say more 🌷',
             'Golden hour by the sea — I watched you, my heart overflowing 🌅',
             'Where sky meets sea, barefoot and together — forever begins here 💖',
